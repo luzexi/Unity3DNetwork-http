@@ -1,6 +1,6 @@
 ﻿
+using SimpleJSON;
 using System.Collections.Generic;
-using CodeTitans.JSon;
 
 
 //  HTTPPacketBase.cs
@@ -49,7 +49,7 @@ namespace Game.Network
     /// </summary>
     public abstract class HTTPPacketFactory
     {
-        public abstract HTTPPacketBase Create(IJSonObject json);    //创建包
+        public abstract HTTPPacketBase Create(JSONNode json);    //创建包
         public abstract string GetPacketAction();  //获取包Action
     }
 

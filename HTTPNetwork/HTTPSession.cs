@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using CodeTitans.JSon;
+using SimpleJSON;
 
 
 
@@ -21,8 +21,8 @@ namespace Game.Network
     {
         private string m_strURL = "";   //主地址
         private HTTPDispatch m_cDispatch;   //调度类
-        private HTTPPacketBase m_cLastPacket;   //最近的一次数据包
-        private Queue<HTTPPacketBase> m_lstReadyPacket = new Queue<HTTPPacketBase>();  //预备发送数据包
+		private HTTPPacketRequest m_cLastPacket;   //最近的一次数据包
+		private Queue<HTTPPacketRequest> m_lstReadyPacket = new Queue<HTTPPacketRequest>();  //预备发送数据包
 
         public HTTPSession(string url, IHTTPDispatchFactory factory)
         {
@@ -35,17 +35,17 @@ namespace Game.Network
         /// </summary>
         /// <param name="url_sub">子地址</param>
         /// <param name="arg">参数</param>
-        public void Send(HTTPPacketBase packet)
+        public void Send(HTTPPacketRequest packet)
         {
             this.m_cLastPacket = packet;
-            HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.GetRequire(), HTTPCallBack);
+            HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.ToParam(), HTTPCallBack);
         }
 
         /// <summary>
         /// 发送准备
         /// </summary>
         /// <param name="packet"></param>
-        public void SendReady(HTTPPacketBase packet)
+		public void SendReady(HTTPPacketRequest packet)
         {
             this.m_lstReadyPacket.Enqueue(packet);
         }
@@ -58,7 +58,7 @@ namespace Game.Network
             if (this.m_lstReadyPacket.Count <= 0)
                 return false;
             this.m_cLastPacket = this.m_lstReadyPacket.Dequeue();
-            HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.GetRequire(), HTTPCallBack);
+            HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.ToParam(), HTTPCallBack);
             return true;
         }
 
@@ -67,7 +67,7 @@ namespace Game.Network
         /// </summary>
         public void ReSend()
         {
-            HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.GetRequire(), HTTPCallBack);
+			HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.ToParam(), HTTPCallBack);
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace Game.Network
                 else
                 {
                     Debug.Log(www.text);
-                    JSonReader read = new JSonReader();
-                    IJSonObject obj = read.ReadAsJSonObject(www.text);
+                    //JSonReader read = new JSonReader();
+					JSONNode obj = JSON.Parse(www.text);
                     Debug.Log(obj.ToString());
                     HTTPPacketBase packet = this.m_cDispatch.CreatePacket(this.m_cLastPacket.GetAction(), obj);
                     if (packet != null)

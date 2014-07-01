@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
-using CodeTitans.JSon;
+using SimpleJSON;
+//using CodeTitans.JSon;
 
 //  HTTPDispatch.cs
 //  Author: Lu Zexi
@@ -132,7 +133,7 @@ namespace Game.Network
         /// <param name="cmd"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public HTTPPacketBase CreatePacket(string packetID, IJSonObject obj)
+		public HTTPPacketBase CreatePacket(string packetID, JSONNode obj)
         {
             if (this.m_mapPacketFactorys.ContainsKey(packetID))
             {
