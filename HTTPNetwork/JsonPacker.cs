@@ -44,9 +44,17 @@ namespace Game.Network
 				else if (t.Equals (typeof (short))) return short.Parse(json.Value);
 				else if (t.Equals (typeof (ushort))) return ushort.Parse(json.Value);
 				else if (t.Equals (typeof (char))) return char.Parse(json.Value);
-				else throw new NotSupportedException (); 
+				else if (t.Equals (typeof(string))) return json.Value;
+				else
+				{
+					Debug.LogError(t.Name);
+					throw new NotSupportedException (); 
+				}
 			}
-			
+
+			if( t.Equals(typeof(string)))
+				return json.Value;
+
 			if (t.IsArray)
 			{
 				if ( !(json is JSONArray) )
@@ -75,6 +83,7 @@ namespace Game.Network
 				if (!entry.FieldMap.TryGetValue (name, out f))
 				{
 					//error
+					Debug.Log("no property name: " + name);
 					continue;
 					//throw new FormatException ();
 				}

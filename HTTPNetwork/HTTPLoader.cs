@@ -41,7 +41,11 @@ namespace Game.Network
         {
             Debug.Log("send url " + url);
             url = System.Uri.EscapeUriString(url);
-            WWW www = new WWW(url,form);
+			WWW www = null;
+			if( form != null )
+				www = new WWW(url,form);
+			else
+				www = new WWW(url);
 
             yield return www;
 
