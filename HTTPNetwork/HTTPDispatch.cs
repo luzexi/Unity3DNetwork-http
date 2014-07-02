@@ -16,13 +16,13 @@ namespace Game.Network
     public abstract class HTTPDispatch
     {
         protected HTTPSession m_cSession; //HTTP会话
-        private NetQueue<HTTPPacketBase> m_cAckQueue;   //应答数据包队列
+        private NetQueue<HTTPPacketAck> m_cAckQueue;   //应答数据包队列
         private Dictionary<string, HTTPHandleBase> m_mapHandles;      //句柄映射集合
         private Dictionary<string, HTTPPacketFactory> m_mapPacketFactorys;       //数据包工厂映射集合
 
         public HTTPDispatch()
         {
-            this.m_cAckQueue = new NetQueue<HTTPPacketBase>(64 * 256);
+            this.m_cAckQueue = new NetQueue<HTTPPacketAck>(64 * 256);
             this.m_cAckQueue.Clear();
             this.m_mapHandles = new Dictionary<string, HTTPHandleBase>();
             this.m_mapPacketFactorys = new Dictionary<string, HTTPPacketFactory>();
@@ -60,7 +60,7 @@ namespace Game.Network
         {
             for (int i = 0; i < 5 && i < this.m_cAckQueue.Size; i++)
             {
-                HTTPPacketBase packet;
+                HTTPPacketAck packet;
                 bool done = this.m_cAckQueue.Dequeue(out packet);
                 {
                     if (packet == null)
@@ -79,7 +79,7 @@ namespace Game.Network
         /// 执行数据包
         /// </summary>
         /// <param name="packet"></param>
-        public virtual void Excute(HTTPPacketBase packet)
+        public virtual void Excute(HTTPPacketAck packet)
         {
             if (this.m_mapHandles.ContainsKey(packet.GetAction()))
             {
@@ -122,7 +122,7 @@ namespace Game.Network
         /// </summary>
         /// <param name="packet"></param>
         /// <returns></returns>
-        public virtual void AckPacket(HTTPPacketBase packet)
+        public virtual void AckPacket(HTTPPacketAck packet)
         {
             this.m_cAckQueue.Enqueue(packet);
         }
@@ -133,7 +133,7 @@ namespace Game.Network
         /// <param name="cmd"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-		public HTTPPacketBase CreatePacket(string packetID, JSONNode obj)
+		public HTTPPacketAck CreatePacket(string packetID, JSONNode obj)
         {
             if (this.m_mapPacketFactorys.ContainsKey(packetID))
             {

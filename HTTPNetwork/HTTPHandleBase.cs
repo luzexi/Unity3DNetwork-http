@@ -1,4 +1,4 @@
-﻿
+
 
 
 //  HandleBase.cs
@@ -14,7 +14,7 @@ namespace Game.Network
     public abstract class HTTPHandleBase
     {
         public abstract string GetAction();   //获取句柄Action
-        public abstract bool Excute(HTTPPacketBase packet); //句柄执行方法
+        public abstract bool Excute(HTTPPacketAck packet); //句柄执行方法
     }
 
 

@@ -4,6 +4,9 @@ using System.Collections;
 using UnityEngine;
 using SimpleJSON;
 
+using HTTP_ON_DATAERROR = System.Action<string>;
+using HTTP_ON_TIMEOUT = System.Action;
+using HTTP_ON_DISCONNECT = System.Action;
 
 
 //  HttpSession.cs
@@ -20,98 +23,101 @@ namespace Game.Network
     public class HTTPSession
     {
         private string m_strURL = "";   //主地址
-        private HTTPDispatch m_cDispatch;   //调度类
-		private HTTPPacketRequest m_cLastPacket;   //最近的一次数据包
-		private Queue<HTTPPacketRequest> m_lstReadyPacket = new Queue<HTTPPacketRequest>();  //预备发送数据包
 
-        public HTTPSession(string url, IHTTPDispatchFactory factory)
+		public HTTP_ON_DATAERROR onDataError = null;
+		public HTTP_ON_TIMEOUT onTimeOut = null;
+		public HTTP_ON_DISCONNECT onDisconnect = null;
+
+        public HTTPSession(string url)
         {
             this.m_strURL = url;
-            this.m_cDispatch = factory.Create(this);
         }
 
-        /// <summary>
-        /// 发送数据
-        /// </summary>
-        /// <param name="url_sub">子地址</param>
-        /// <param name="arg">参数</param>
-        public void Send(HTTPPacketRequest packet)
-        {
-            this.m_cLastPacket = packet;
-            HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.ToParam(), HTTPCallBack);
-        }
+		/// <summary>
+		/// Raises the data error event.
+		/// </summary>
+		/// <param name="error">Error.</param>
+		private void OnDataError( string error )
+		{
+			if(this.onDataError != null )
+			{
+				this.onDataError(error);
+			}
+		}
+
+		/// <summary>
+		/// Raises the time out event.
+		/// </summary>
+		private void OnTimeOut()
+		{
+			if(this.onTimeOut != null )
+			{
+				this.onTimeOut();
+			}
+		}
+
+		/// <summary>
+		/// Raises the disconnect event.
+		/// </summary>
+		private void OnDisconnect()
+		{
+			if(this.onDisconnect != null )
+			{
+				this.onDisconnect();
+			}
+		}
 
         /// <summary>
-        /// 发送准备
+        /// Sends the GET data.
         /// </summary>
-        /// <param name="packet"></param>
-		public void SendReady(HTTPPacketRequest packet)
+        /// <param name="packet">Packet.</param>
+        /// <param name="callback">Callback.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        public void SendGET<T>(HTTPPacketRequest packet ,System.Action<T> callback) where T : HTTPPacketAck
         {
-            this.m_lstReadyPacket.Enqueue(packet);
+			HTTPLoader.GoWWW<T>(this.m_strURL + packet.GetAction() + packet.ToParam() , null , FinishCallBack , callback);
         }
 
-        /// <summary>
-        /// 发送准备好的数据包
-        /// </summary>
-        public bool Send()
-        {
-            if (this.m_lstReadyPacket.Count <= 0)
-                return false;
-            this.m_cLastPacket = this.m_lstReadyPacket.Dequeue();
-            HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.ToParam(), HTTPCallBack);
-            return true;
-        }
+		/// <summary>
+		/// Post the specified packet and callback.
+		/// </summary>
+		/// <param name="packet">Packet.</param>
+		/// <param name="callback">Callback.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public void SendPOST<T>(HTTPPacketRequest packet ,System.Action<T> callback) where T : HTTPPacketAck
+		{
+			HTTPLoader.GoWWW<T>(this.m_strURL + packet.GetAction(), packet.ToForm() , FinishCallBack , callback);
+		}
 
-        /// <summary>
-        /// 重新发送
-        /// </summary>
-        public void ReSend()
-        {
-			HTTPLoader.GoWWW(this.m_strURL + this.m_cLastPacket.GetAction() + this.m_cLastPacket.ToParam(), HTTPCallBack);
-        }
-
-        /// <summary>
-        /// HTTP回调
-        /// </summary>
-        /// <param name="www"></param>
-        private void HTTPCallBack(WWW www)
-        {
-            try
-            {
-                if (www.error != null)
-                {
-                    //GAME_LOG.ERROR("ERROR HTTP : " + www.error);
-                    Debug.LogError("ERROR HTTP : " + www.error);
-                    this.m_cDispatch.OnDisconnect();
-                }
-                else
-                {
-                    Debug.Log(www.text);
-                    //JSonReader read = new JSonReader();
+		/// <summary>
+		/// Calls the back.
+		/// </summary>
+		/// <param name="www">Www.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		private void FinishCallBack<T>(WWW www , System.Action<T> callback) where T : HTTPPacketAck
+		{
+			try
+			{
+				if (www.error != null)
+				{
+					Debug.LogError("ERROR HTTP : " + www.error);
+					OnDisconnect();
+				}
+				else
+				{
+					Debug.Log(www.text);
 					JSONNode obj = JSON.Parse(www.text);
-                    Debug.Log(obj.ToString());
-                    HTTPPacketBase packet = this.m_cDispatch.CreatePacket(this.m_cLastPacket.GetAction(), obj);
-                    if (packet != null)
-                    {
-                        this.m_cDispatch.AckPacket(packet);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.Log(ex.StackTrace);
-                this.m_cDispatch.OnDataError();
-            }
-        }
-
-        /// <summary>
-        /// 逻辑更新
-        /// </summary>
-        public void Update()
-        {
-            if (this.m_cDispatch != null)
-                this.m_cDispatch.Update();
-        }
+					Debug.Log(obj.ToString());
+					T packet = JsonPacker.Unpack(obj , typeof(T)) as T;
+					callback(packet);
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.LogError(ex.StackTrace);
+				OnDataError(ex.StackTrace);
+			}
+		}
     }
 
 

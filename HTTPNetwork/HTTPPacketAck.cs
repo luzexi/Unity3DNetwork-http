@@ -9,18 +9,17 @@ using System.Collections.Generic;
 
 namespace Game.Network
 {
-
     /// <summary>
     /// HTTP数据包基础类
     /// </summary>
-    public abstract class HTTPPacketBase
+    public abstract class HTTPPacketAck
     {
         protected string m_strAction;    //动作URL
         public int m_iErrorCode;   //错误码
         public string m_strErrorDes;   //错误描述
         public long m_lServerTime;  //服务器时间
 
-        public HTTPPacketBase()
+        public HTTPPacketAck()
         {
         }
 
@@ -49,7 +48,7 @@ namespace Game.Network
     /// </summary>
     public abstract class HTTPPacketFactory
     {
-        public abstract HTTPPacketBase Create(JSONNode json);    //创建包
+        public abstract HTTPPacketAck Create(JSONNode json);    //创建包
         public abstract string GetPacketAction();  //获取包Action
     }
 

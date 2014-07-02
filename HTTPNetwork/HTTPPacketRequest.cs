@@ -17,13 +17,15 @@ namespace Game.Network
 	/// </summary>
 	public class HTTPPacketRequest
 	{
+		protected string m_strAction;
+
 		/// <summary>
 		/// Gets the action path.
 		/// </summary>
 		/// <returns>The action.</returns>
 		public virtual string GetAction()
 		{
-			return "";
+			return this.m_strAction;
 		}
 
 		/// <summary>

@@ -15,7 +15,8 @@ namespace Game.Network
     /// </summary>
     public class HTTPLoader : MonoBehaviour
     {
-        public delegate void CALLBACK(WWW www);
+		public delegate void CALLBACK<T>(WWW www , System.Action<T> callback);
+		//public delegate void CALLBACK2<T>(System.Action<T> callback);
 
         /// <summary>
         /// 开始WWW
@@ -23,11 +24,11 @@ namespace Game.Network
         /// <param name="url"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public static void GoWWW(string url, CALLBACK callback)
+		public static void GoWWW<T>(string url,WWWForm form , CALLBACK<T> callback , System.Action<T> callback2 )
         {
             GameObject obj = new GameObject("HTTPLoader");
             HTTPLoader loader = obj.AddComponent<HTTPLoader>();
-            loader.StartCoroutine(loader.StartHTTP(url, callback));
+            loader.StartCoroutine(loader.StartHTTP<T>(url , form , callback , callback2));
         }
 
         /// <summary>
@@ -36,16 +37,16 @@ namespace Game.Network
         /// <param name="url"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public IEnumerator StartHTTP(string url, CALLBACK callback)
+        public IEnumerator StartHTTP<T>(string url , WWWForm form, CALLBACK<T> callback , System.Action<T> callback2 )
         {
             Debug.Log("send url " + url);
             url = System.Uri.EscapeUriString(url);
-            WWW www = new WWW(url);
+            WWW www = new WWW(url,form);
 
             yield return www;
 
             if (callback != null)
-                callback(www);
+                callback(www , callback2);
 
             GameObject.Destroy(this.gameObject);
         }
