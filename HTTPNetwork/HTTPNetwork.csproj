@@ -37,12 +37,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HTTPDispatch.cs" />
-    <Compile Include="HTTPDispatchFactory.cs" />
-    <Compile Include="HTTPHandleBase.cs" />
     <Compile Include="HTTPLoader.cs" />
     <Compile Include="HTTPSession.cs" />
-    <Compile Include="IHTTPDispatchFactory.cs" />
     <Compile Include="NetQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HTTPPacketRequest.cs" />
