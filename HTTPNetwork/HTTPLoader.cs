@@ -34,7 +34,7 @@ namespace Game.Network
         /// <param name="error_callback">Error_callback.</param>
         /// <param name="callback2">Callback2.</param>
 		public static void GoWWW<T>(
-			string url , WWWForm form ,
+			string url , WWWForm form , byte[] byteData , Hashtable headers ,
 			System.Action<string,System.Action,System.Action> error_callback ,
 			System.Action<T> callback2
 			)
@@ -43,7 +43,7 @@ namespace Game.Network
             GameObject obj = new GameObject("HTTPLoader");
             HTTPLoader loader = obj.AddComponent<HTTPLoader>();
 			loader.m_eState = STATE.START;
-            loader.StartCoroutine(loader.StartHTTP<T>(url , form , error_callback , callback2));
+            loader.StartCoroutine(loader.StartHTTP<T>(url , form , byteData , headers , error_callback , callback2));
         }
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Game.Network
         /// Starts the HTTP.
         /// </summary>
         /// <returns>The HTT.</returns>
-		public IEnumerator StartHTTP<T>(string url , WWWForm form ,
+		public IEnumerator StartHTTP<T>(string url , WWWForm form , byte[] byteData , Hashtable headers ,
 		                                System.Action<string,System.Action,System.Action> error_callback ,
 		                                System.Action<T> callback2)
 			where T : HTTPPacketAck
@@ -80,10 +80,45 @@ namespace Game.Network
 				case STATE.START:
 					Debug.Log("send url " + url);
 					url = System.Uri.EscapeUriString(url);
-					if( form != null )
-						www = new WWW(url , form);
-					else
-						www = new WWW(url);
+//					if( form != null )
+//						www = new WWW(url , form);
+//					else
+//						www = new WWW(url);
+
+					if(byteData != null)
+					{
+						if(headers == null)
+						{
+							www = new WWW(url, byteData);
+						}
+						else
+						{
+							www = new WWW(url, byteData, headers);
+						}
+					}
+					else if(form != null)
+					{
+						if( headers == null )
+						{
+							www = new WWW(url, form);
+						}
+						else
+						{
+							www = new WWW(url, form.data, headers);
+						}
+					}
+					else if( form == null )
+					{
+						if( headers == null )
+						{
+							www = new WWW(url);
+						}
+						else
+						{
+							www = new WWW(url, new byte[]{(byte) 0}, headers);
+						}
+					}
+
 					yield return www;
 					try
 					{
@@ -101,7 +136,8 @@ namespace Game.Network
 							Debug.Log(obj.ToString());
 							T packet = JsonPacker.Unpack(obj , typeof(T)) as T;
 							this.m_eState = STATE.CLOSE;
-							callback2(packet);
+							if(callback2 != null )
+								callback2(packet);
 						}
 					}
 					catch( Exception ex )

@@ -36,9 +36,9 @@ namespace Game.Network
         /// <param name="packet">Packet.</param>
         /// <param name="callback">Callback.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public void SendGET<T>(HTTPPacketRequest packet ,System.Action<T> callback) where T : HTTPPacketAck
+        public void SendGET<T>(HTTPPacketRequest packet ,System.Action<T>  callback = null, Hashtable headers = null) where T : HTTPPacketAck
         {
-			HTTPLoader.GoWWW<T>(this.m_strURL + packet.GetAction() + packet.ToParam() , null , onDataError , callback);
+			HTTPLoader.GoWWW<T>(this.m_strURL + packet.GetAction() + packet.ToParam() , null , null , headers , onDataError , callback);
         }
 
 		/// <summary>
@@ -47,40 +47,22 @@ namespace Game.Network
 		/// <param name="packet">Packet.</param>
 		/// <param name="callback">Callback.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void SendPOST<T>(HTTPPacketRequest packet ,System.Action<T> callback) where T : HTTPPacketAck
+		public void SendPOST<T>(HTTPPacketRequest packet ,System.Action<T> callback = null, Hashtable headers = null) where T : HTTPPacketAck
 		{
-			HTTPLoader.GoWWW<T>(this.m_strURL + packet.GetAction(), packet.ToForm() , onDataError , callback);
+			HTTPLoader.GoWWW<T>(this.m_strURL + packet.GetAction(), packet.ToForm() , null , headers , onDataError , callback);
 		}
 
-//		/// <summary>
-//		/// Calls the back.
-//		/// </summary>
-//		/// <param name="www">Www.</param>
-//		/// <typeparam name="T">The 1st type parameter.</typeparam>
-//		private void FinishCallBack<T>(WWW www , System.Action<T> callback) where T : HTTPPacketAck
-//		{
-//			try
-//			{
-//				if (www.error != null)
-//				{
-//					Debug.LogError("ERROR HTTP : " + www.error);
-//					OnDisconnect();
-//				}
-//				else
-//				{
-//					Debug.Log(www.text);
-//					JSONNode obj = JSON.Parse(www.text);
-//					Debug.Log(obj.ToString());
-//					T packet = JsonPacker.Unpack(obj , typeof(T)) as T;
-//					callback(packet);
-//				}
-//			}
-//			catch (Exception ex)
-//			{
-//				Debug.LogError(ex.StackTrace);
-//				OnDataError(ex.StackTrace);
-//			}
-//		}
+		/// <summary>
+		/// Sends the Bytes Data.
+		/// </summary>
+		/// <param name="packet">Packet.</param>
+		/// <param name="callback">Callback.</param>
+		/// <param name="headers">Headers.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public void SendBYTE<T>(HTTPPacketRequest packet ,System.Action<T> callback = null, Hashtable headers = null) where T : HTTPPacketAck
+		{
+			HTTPLoader.GoWWW<T>(this.m_strURL + packet.GetAction(), null , packet.ToMsgPacketByte() , headers , onDataError , callback);
+		}
     }
 
 

@@ -47,12 +47,26 @@
     <Compile Include="ReflectionCache.cs" />
     <Compile Include="ReflectionCacheEntry.cs" />
     <Compile Include="HTTPPacketAck.cs" />
+    <Compile Include="MsgPack\BoxingPacker.cs" />
+    <Compile Include="MsgPack\CompiledPacker.cs" />
+    <Compile Include="MsgPack\CustomPacker.cs" />
+    <Compile Include="MsgPack\MsgPackReader.cs" />
+    <Compile Include="MsgPack\MsgPackWriter.cs" />
+    <Compile Include="MsgPack\ObjectPacker.cs" />
+    <Compile Include="MsgPack\ReflectionCache.cs" />
+    <Compile Include="MsgPack\ReflectionCacheEntry.cs" />
+    <Compile Include="MsgPack\TypePrefixes.cs" />
+    <Compile Include="MsgPack\Compiler\EmitExtensions.cs" />
+    <Compile Include="MsgPack\Compiler\PackILGenerator.cs" />
+    <Compile Include="MsgPack\Compiler\Variable.cs" />
+    <Compile Include="MsgPack\Compiler\VariableType.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service References\" />
+    <Folder Include="MsgPack\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

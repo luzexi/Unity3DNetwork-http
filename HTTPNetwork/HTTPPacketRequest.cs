@@ -1,5 +1,8 @@
 using UnityEngine;
 using System;
+using System.IO;
+using MsgPack;
+//using System.Runtime.Serialization.Formatters.Binary;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
@@ -73,6 +76,32 @@ namespace Game.Network
 			}
 			
 			return form;
+		}
+
+
+		/// <summary>
+		/// Tos the message packet byte.
+		/// </summary>
+		/// <returns>The message packet byte.</returns>
+		public byte[] ToMsgPacketByte()
+		{
+			byte[] res = null;
+			CustomPacker customPacker = new CustomPacker();
+			res = customPacker.Pack(this);
+//			MemoryStream resMS = new MemoryStream();
+//			Type t = GetType();
+//			FieldInfo[] fis = t.GetFields(BindingFlags.Public | BindingFlags.Instance);
+//			foreach (FieldInfo f in fis)
+//			{
+//				object val = f.GetValue(this);
+//				BinaryFormatter bf = new BinaryFormatter();
+//				MemoryStream ms = new MemoryStream();
+//				bf.Serialize(ms, val);
+//				byte[] dataRes = ms.ToArray();
+//				resMS.Write(dataRes , 0 , dataRes.Length);
+//				//form.AddField(f.Name, val != null ? val.ToString() : "");
+//			}
+			return res;
 		}
 	}
 
