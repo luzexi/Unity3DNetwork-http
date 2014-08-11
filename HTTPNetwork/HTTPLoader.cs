@@ -33,7 +33,7 @@ namespace Game.Network
         /// <param name="form">Form.</param>
         /// <param name="error_callback">Error_callback.</param>
         /// <param name="callback2">Callback2.</param>
-		public static void GoWWW<T>(
+		internal static void GoWWW<T>(
 			string url , WWWForm form , byte[] byteData , Hashtable headers ,
 			System.Action<string,System.Action,System.Action> error_callback ,
 			System.Action<T> callback2
@@ -49,7 +49,7 @@ namespace Game.Network
 		/// <summary>
 		/// Res the send.
 		/// </summary>
-		public void ReSend()
+		internal void ReSend()
 		{
 			this.m_eState = STATE.START;
 		}
@@ -57,7 +57,7 @@ namespace Game.Network
 		/// <summary>
 		/// Close this instance.
 		/// </summary>
-		public void Close()
+		internal void Close()
 		{
 			this.m_eState = STATE.CLOSE;
 		}
@@ -66,7 +66,7 @@ namespace Game.Network
         /// Starts the HTTP.
         /// </summary>
         /// <returns>The HTT.</returns>
-		public IEnumerator StartHTTP<T>(string url , WWWForm form , byte[] byteData , Hashtable headers ,
+		internal IEnumerator StartHTTP<T>(string url , WWWForm form , byte[] byteData , Hashtable headers ,
 		                                System.Action<string,System.Action,System.Action> error_callback ,
 		                                System.Action<T> callback2)
 			where T : HTTPPacketAck

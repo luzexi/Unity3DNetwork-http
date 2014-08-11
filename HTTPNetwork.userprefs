@@ -2,18 +2,20 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="HTTPNetwork/HTTPPacketRequest.cs">
     <Files>
-      <File FileName="../../crosssummoner/Assets/Scripts/Core/Common/Connection/URLConnection.cs" Line="148" Column="14" />
-      <File FileName="HTTPNetwork/HTTPLoader.cs" Line="139" Column="17" />
-      <File FileName="HTTPNetwork/HTTPSession.cs" Line="64" Column="76" />
-      <File FileName="HTTPNetwork/HTTPPacketRequest.cs" Line="90" Column="35" />
-      <File FileName="HTTPNetwork/SimpleJSON.cs" Line="668" Column="49" />
+      <File FileName="HTTPNetwork/HTTPLoader.cs" Line="1" Column="1" />
+      <File FileName="HTTPNetwork/HTTPSession.cs" Line="18" Column="2" />
+      <File FileName="HTTPNetwork/HTTPPacketRequest.cs" Line="90" Column="34" />
+      <File FileName="HTTPNetwork/SimpleJSON.cs" Line="1" Column="1" />
+      <File FileName="HTTPNetwork/HTTPPacketAck.cs" Line="1" Column="1" />
+      <File FileName="../../crosssummoner/Assets/Scripts/Core/API/Request/MsgPackDataAPI.cs" Line="1" Column="1" />
+      <File FileName="HTTPNetwork/ReflectionCache.cs" Line="22" Column="32" />
+      <File FileName="HTTPNetwork/JsonPacker.cs" Line="78" Column="33" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="HTTPNetwork" expanded="True">
-            <Node name="References" expanded="True" />
-            <Node name="HTTPPacketRequest.cs" selected="True" />
+            <Node name="SimpleJSON.cs" selected="True" />
           </Node>
         </State>
       </Pad>
