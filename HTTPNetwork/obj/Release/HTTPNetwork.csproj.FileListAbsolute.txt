@@ -1,7 +1,0 @@
-E:\Work\GameSvn\Code\client\Lib\HTTPNetwork\HTTPNetwork\bin\Release\HTTPNetwork.dll
-E:\Work\GameSvn\Code\client\Lib\HTTPNetwork\HTTPNetwork\bin\Release\HTTPNetwork.pdb
-E:\Work\GameSvn\Code\client\Lib\HTTPNetwork\HTTPNetwork\bin\Release\CodeTitans.JSon.dll
-E:\Work\GameSvn\Code\client\Lib\HTTPNetwork\HTTPNetwork\bin\Release\UnityEngine.dll
-E:\Work\GameSvn\Code\client\Lib\HTTPNetwork\HTTPNetwork\obj\Release\HTTPNetwork.dll
-E:\Work\GameSvn\Code\client\Lib\HTTPNetwork\HTTPNetwork\obj\Release\HTTPNetwork.pdb
-E:\Work\GameSvn\Code\client\Lib\HTTPNetwork\HTTPNetwork\obj\Release\HTTPNetwork.csprojResolveAssemblyReference.cache

@@ -60,6 +60,8 @@
     <Compile Include="MsgPack\Compiler\PackILGenerator.cs" />
     <Compile Include="MsgPack\Compiler\Variable.cs" />
     <Compile Include="MsgPack\Compiler\VariableType.cs" />
+    <Compile Include="IHttpSession.cs" />
+    <Compile Include="HttpDummySession.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

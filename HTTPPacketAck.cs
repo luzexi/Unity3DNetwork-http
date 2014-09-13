@@ -1,9 +1,9 @@
 ﻿
-using SimpleJSON;
+//using Geme.SimpleJSON;
 using System.Collections.Generic;
 
 
-//  HTTPPacketBase.cs
+//  HTTPPacketRequest.cs
 //  Author: Lu Zexi
 //  2013-11-12
 

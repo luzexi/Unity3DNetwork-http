@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.IO;
 using MsgPack;
-//using System.Runtime.Serialization.Formatters.Binary;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
