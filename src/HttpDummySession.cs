@@ -23,11 +23,12 @@ namespace Game.Network
 		/// <param name="packet">Packet.</param>
 		/// <param name="callback">Callback.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void SendGET<T>(HTTPPacketRequest packet ,System.Action<T>  callback = null, IHttpSession.PROCESS_HANDLE process = null) where T : HTTPPacketAck
+		public void SendGET<T>(HTTPPacketRequest packet ,System.Action<T>  callback = null, IHttpSession.PROCESS_HANDLE process = null)
+			where T : HTTPPacketAck
 		{
 			T ack = null;
 			if( process != null )
-				ack = process(packet);
+				ack = process(packet) as T;
 
 			if(callback != null)
 				callback(ack);
@@ -43,7 +44,7 @@ namespace Game.Network
 		{
 			T ack = null;
 			if(process != null)
-				ack = process(packet);
+				ack = process(packet) as T;
 
 			if(callback != null)
 				callback(ack);
@@ -60,7 +61,7 @@ namespace Game.Network
 		{
 			T ack = null;
 			if(process != null)
-				ack = process(packet);
+				ack = process(packet) as T;
 			
 			if(callback != null)
 				callback(ack);
