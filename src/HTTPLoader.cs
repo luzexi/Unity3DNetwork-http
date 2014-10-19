@@ -146,6 +146,8 @@ namespace Game.Network
 						if(error_callback != null)
 							error_callback(ex.StackTrace,ReSend , Close);
 					}
+					www.Dispose();
+					www = null;
 					break;
 				case STATE.STOP:
 					yield return new WaitForFixedUpdate();
