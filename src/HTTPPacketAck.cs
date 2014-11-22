@@ -14,7 +14,10 @@ namespace Game.Network
     /// </summary>
     public abstract class HTTPPacketAck
     {
-		public HTTPPacketHead header;	//the header of the packet
+		// public HTTPPacketHead header;	//the header of the packet
+		public int code;
+		public string desc;
+		public int time;
 
         public HTTPPacketAck()
         {
